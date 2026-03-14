@@ -16,7 +16,7 @@ Current channel support: Telegram only.
 
 ![ASR-only demo](./assets/asr-answer.gif)
 
-**VoxSense+Gemini-3-Flash**
+**VoxSense (`Gemini-3-Flash`)**
 
 ![VoxSense demo](./assets/voxsense.gif)
 
