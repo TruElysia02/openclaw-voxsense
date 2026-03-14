@@ -3,11 +3,18 @@
 Context-aware voice understanding for OpenClaw.  
 面向 OpenClaw 的上下文语音理解插件。
 
+Current channel support: Telegram only.  
+当前仅支持 Telegram。
+
 ## Demo / 演示
+
+**Prompt / 问题**
+
+`我是个大帅哥能告诉我这句话里哪个字最长吗`
 
 **ASR only (`Groq / whisper-large-v3-turbo`)**
 
-![ASR-only demo](./assets/asr-only.gif)
+![ASR-only demo](./assets/asr-answer.gif)
 
 **VoxSense**
 
