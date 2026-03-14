@@ -1,0 +1,39 @@
+{
+  "name": "openclaw-voxsense",
+  "version": "0.1.0",
+  "description": "OpenClaw plugin that lets a multimodal model understand voice messages in context and hand them back to the main agent.",
+  "type": "module",
+  "author": "TruElysia02",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/TruElysia02/openclaw-voxsense.git"
+  },
+  "homepage": "https://github.com/TruElysia02/openclaw-voxsense#readme",
+  "bugs": {
+    "url": "https://github.com/TruElysia02/openclaw-voxsense/issues"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "files": [
+    "index.ts",
+    "openclaw.plugin.json",
+    "README.md"
+  ],
+  "keywords": [
+    "openclaw",
+    "openclaw-plugin",
+    "gemini",
+    "telegram",
+    "audio"
+  ],
+  "peerDependencies": {
+    "openclaw": ">=2026.3.11"
+  },
+  "openclaw": {
+    "extensions": [
+      "./index.ts"
+    ]
+  }
+}

@@ -1,0 +1,139 @@
+{
+  "id": "openclaw-voxsense",
+  "name": "OpenClaw VoxSense",
+  "description": "Use a multimodal model to understand inbound voice messages in context, then hand the turn back to the main OpenClaw agent.",
+  "configSchema": {
+    "type": "object",
+    "additionalProperties": false,
+    "properties": {
+      "provider": {
+        "type": "string"
+      },
+      "model": {
+        "type": "string"
+      },
+      "channels": {
+        "type": "array",
+        "items": {
+          "type": "string"
+        }
+      },
+      "historyMessages": {
+        "type": "number",
+        "minimum": 0,
+        "maximum": 100
+      },
+      "maxHistoryChars": {
+        "type": "number",
+        "minimum": 1000,
+        "maximum": 100000
+      },
+      "timeoutMs": {
+        "type": "number",
+        "minimum": 1000,
+        "maximum": 600000
+      },
+      "onlyWhenNoText": {
+        "type": "boolean"
+      },
+      "mode": {
+        "type": "string",
+        "enum": ["reply", "handoff"]
+      },
+      "requireStructuredResponse": {
+        "type": "boolean"
+      },
+      "suppressDefaultReply": {
+        "type": "boolean"
+      },
+      "suppressTranscriptEcho": {
+        "type": "boolean"
+      },
+      "storeHeardTextInSession": {
+        "type": "boolean"
+      },
+      "debug": {
+        "type": "boolean"
+      },
+      "systemPrompt": {
+        "type": "string"
+      },
+      "failureNotice": {
+        "type": "string"
+      }
+    }
+  },
+  "uiHints": {
+    "provider": {
+      "label": "Provider ID",
+      "help": "Configured model provider id that uses the Google Generative AI API shape, for example haloai-gemini or google."
+    },
+    "model": {
+      "label": "Model ID",
+      "help": "Gemini model id used for direct audio handling, for example gemini-3-flash-preview."
+    },
+    "channels": {
+      "label": "Channels",
+      "help": "Message channels where direct audio mode is active. Telegram is implemented today.",
+      "advanced": true
+    },
+    "historyMessages": {
+      "label": "History Messages",
+      "help": "How many recent user/assistant messages are forwarded as context before the new audio turn."
+    },
+    "maxHistoryChars": {
+      "label": "History Char Budget",
+      "help": "Maximum total history characters forwarded into the direct audio request.",
+      "advanced": true
+    },
+    "timeoutMs": {
+      "label": "Request Timeout Ms",
+      "help": "Timeout for the direct audio request.",
+      "advanced": true
+    },
+    "onlyWhenNoText": {
+      "label": "Audio-Only Messages",
+      "help": "Only intercept messages whose raw body is an audio placeholder rather than typed text."
+    },
+    "mode": {
+      "label": "Mode",
+      "help": "Use \"handoff\" to let the audio model understand the voice message and then hand the turn back to the main OpenClaw agent. Use \"reply\" for the older direct-reply path."
+    },
+    "requireStructuredResponse": {
+      "label": "Require Structured Response",
+      "help": "Treat non-JSON model output as a failure instead of guessing what the model heard.",
+      "advanced": true
+    },
+    "suppressDefaultReply": {
+      "label": "Suppress Default Reply",
+      "help": "Ask the normal OpenClaw agent run to stay silent while the plugin handles the audio turn."
+    },
+    "suppressTranscriptEcho": {
+      "label": "Suppress Transcript Echo",
+      "help": "Drop chat replies that look like the model merely repeated what it heard."
+    },
+    "storeHeardTextInSession": {
+      "label": "Store Heard Text",
+      "help": "Write the hidden heard-text transcript into the session so later turns keep context."
+    },
+    "debug": {
+      "label": "Debug Logging",
+      "help": "Emit richer plugin-side logs for routing, model output previews, and suppression decisions.",
+      "advanced": true
+    },
+    "systemPrompt": {
+      "label": "System Prompt",
+      "help": "Optional extra instruction appended to the direct audio request.",
+      "advanced": true
+    },
+    "failureNotice": {
+      "label": "Failure Notice",
+      "help": "Optional text sent back if direct audio handling fails after suppression was armed.",
+      "advanced": true
+    }
+  },
+  "version": "0.1.0",
+  "channels": [
+    "telegram"
+  ]
+}
