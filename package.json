@@ -1,6 +1,6 @@
 {
   "name": "openclaw-voxsense",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "OpenClaw plugin that lets a multimodal model understand voice messages in context and hand them back to the main agent.",
   "type": "module",
   "author": "TruElysia02",
@@ -19,7 +19,8 @@
   "files": [
     "index.ts",
     "openclaw.plugin.json",
-    "README.md"
+    "README.md",
+    "assets"
   ],
   "keywords": [
     "openclaw",

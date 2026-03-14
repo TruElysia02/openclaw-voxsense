@@ -128,7 +128,7 @@ const SUPPRESSION_TTL_MS = 90 * 1000;
 const DEFAULT_FAILURE_NOTICE =
   "Direct audio handling failed for this voice message. Please try again or use text for this turn.";
 const RUNTIME_STATE_FILENAME = "openclaw-voxsense.runtime.json";
-const COMMAND_NAME = "gemini-audio";
+const COMMAND_NAME = "voxsense";
 const HEARD_CUSTOM_TYPES = ["contextual-gemini-audio.heard", "openclaw-voxsense.heard"] as const;
 
 const routeCache = new Map<string, CachedRoute>();
@@ -1234,38 +1234,40 @@ function resolveCachedRoute(params: {
 export default function register(api: OpenClawPluginApi): void {
   const config = normalizeConfig(api.pluginConfig);
 
+  const commandHandler = async (ctx: { args?: string }) => {
+    const runtimeState = await readRuntimeState(api, config);
+    const args = (ctx.args ?? "")
+      .trim()
+      .toLowerCase()
+      .split(/\s+/)
+      .filter(Boolean);
+    if (args.length === 0 || args[0] === "status" || args[0] === "help") {
+      return { text: buildStatusText(config, runtimeState) };
+    }
+    if (args[0] === "on" || args[0] === "off") {
+      const nextState = await writeRuntimeState(api, {
+        ...runtimeState,
+        active: args[0] === "on",
+      });
+      logInfo(api, `runtime state updated via /${COMMAND_NAME}`, nextState);
+      return { text: buildStatusText(config, nextState) };
+    }
+    if (args[0] === "debug" && (args[1] === "on" || args[1] === "off")) {
+      const nextState = await writeRuntimeState(api, {
+        ...runtimeState,
+        debug: args[1] === "on",
+      });
+      logInfo(api, `runtime debug updated via /${COMMAND_NAME}`, nextState);
+      return { text: buildStatusText(config, nextState) };
+    }
+    return { text: buildStatusText(config, runtimeState) };
+  };
+
   api.registerCommand({
     name: COMMAND_NAME,
-    description: "Manage Gemini direct-audio mode for this plugin",
+    description: "Manage VoxSense runtime mode for this plugin",
     acceptsArgs: true,
-    handler: async (ctx) => {
-      const runtimeState = await readRuntimeState(api, config);
-      const args = (ctx.args ?? "")
-        .trim()
-        .toLowerCase()
-        .split(/\s+/)
-        .filter(Boolean);
-      if (args.length === 0 || args[0] === "status" || args[0] === "help") {
-        return { text: buildStatusText(config, runtimeState) };
-      }
-      if (args[0] === "on" || args[0] === "off") {
-        const nextState = await writeRuntimeState(api, {
-          ...runtimeState,
-          active: args[0] === "on",
-        });
-        logInfo(api, `runtime state updated via /${COMMAND_NAME}`, nextState);
-        return { text: buildStatusText(config, nextState) };
-      }
-      if (args[0] === "debug" && (args[1] === "on" || args[1] === "off")) {
-        const nextState = await writeRuntimeState(api, {
-          ...runtimeState,
-          debug: args[1] === "on",
-        });
-        logInfo(api, `runtime debug updated via /${COMMAND_NAME}`, nextState);
-        return { text: buildStatusText(config, nextState) };
-      }
-      return { text: buildStatusText(config, runtimeState) };
-    },
+    handler: commandHandler,
   });
 
   api.on("message_received", async (event, ctx) => {

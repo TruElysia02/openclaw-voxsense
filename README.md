@@ -3,6 +3,16 @@
 Context-aware voice understanding for OpenClaw.  
 面向 OpenClaw 的上下文语音理解插件。
 
+## Demo / 演示
+
+**ASR only (`Groq / whisper-large-v3-turbo`)**
+
+![ASR-only demo](./assets/asr-only.gif)
+
+**VoxSense**
+
+![VoxSense demo](./assets/voxsense.gif)
+
 ## Summary / 简介
 
 **English**
@@ -108,18 +118,15 @@ For voice replies, use normal OpenClaw TTS:
 
 ## Runtime Command / 运行时命令
 
-The command name is currently kept as:
+Primary command:
 
 ```text
-/gemini-audio status
-/gemini-audio on
-/gemini-audio off
-/gemini-audio debug on
-/gemini-audio debug off
+/voxsense status
+/voxsense on
+/voxsense off
+/voxsense debug on
+/voxsense debug off
 ```
-
-This is for backward compatibility.  
-当前命令名保留为 `/gemini-audio`，主要是为了兼容旧配置。
 
 ## Notes / 说明
 
