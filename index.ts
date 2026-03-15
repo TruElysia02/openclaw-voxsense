@@ -130,6 +130,9 @@ const DEFAULT_FAILURE_NOTICE =
 const RUNTIME_STATE_FILENAME = "openclaw-voxsense.runtime.json";
 const COMMAND_NAME = "voxsense";
 const HEARD_CUSTOM_TYPES = ["contextual-gemini-audio.heard", "openclaw-voxsense.heard"] as const;
+const AUDIO_HANDOFF_CONTEXT_PREFIX = "Audio understanding result for the user's latest voice message.";
+const AUDIO_FAILURE_CONTEXT_PREFIX =
+  "The user's latest turn is a voice message, but direct audio understanding failed for this turn.";
 
 const routeCache = new Map<string, CachedRoute>();
 const suppressionBySession = new Map<string, PendingSuppression>();
@@ -986,11 +989,19 @@ function extractLatestUserPromptText(messages: unknown[]): string {
       continue;
     }
     const text = textFromContent((entry as { content?: unknown }).content);
-    if (text) {
+    if (text && !isInjectedAudioContextText(text)) {
       return text;
     }
   }
   return "";
+}
+
+function isInjectedAudioContextText(value: string): boolean {
+  const trimmed = value.trim();
+  return (
+    trimmed.startsWith(AUDIO_HANDOFF_CONTEXT_PREFIX) ||
+    trimmed.startsWith(AUDIO_FAILURE_CONTEXT_PREFIX)
+  );
 }
 
 function extractAudioTurnFromPrompt(prompt: string, messages: unknown[]): {
@@ -1002,6 +1013,9 @@ function extractAudioTurnFromPrompt(prompt: string, messages: unknown[]): {
     .map((value) => value.trim())
     .filter(Boolean);
   for (const rawBody of candidateTexts) {
+    if (isInjectedAudioContextText(rawBody)) {
+      continue;
+    }
     const match =
       rawBody.match(/\[media attached:\s*([^|\]\n]+?)\s*\((audio\/[^)\n]+)\)\s*(?:\||\])/i) ??
       rawBody.match(/\[media attached:\s*([^|\]\n]+?)\s*(?:\||\])/i);

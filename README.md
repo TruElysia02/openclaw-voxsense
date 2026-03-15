@@ -6,6 +6,9 @@ Context-aware voice understanding for OpenClaw.
 Current channel support: Telegram only.  
 当前仅支持 Telegram。
 
+Current model support: Gemini only for now.  
+当前模型支持暂时仅限 Gemini。
+
 ## Demo / 演示
 
 **Prompt / 问题**
@@ -25,6 +28,7 @@ Current channel support: Telegram only.
 **English**
 
 - Works with `OpenClaw >= 2026.3.11`
+- Currently supports Gemini multimodal models only
 - Default mode is `handoff`
 - A multimodal model listens to the raw voice message plus recent chat context
 - The plugin returns structured understanding to the main OpenClaw agent
@@ -33,6 +37,7 @@ Current channel support: Telegram only.
 **中文**
 
 - 适用于 `OpenClaw >= 2026.3.11`
+- 当前暂时仅支持 Gemini 多模态模型
 - 默认模式为 `handoff`
 - 使用多模态模型直接理解原始语音和最近会话上下文
 - 插件把结构化理解结果交回主 OpenClaw agent
@@ -137,7 +142,8 @@ Primary command:
 
 ## Notes / 说明
 
-- VoxSense expects a provider that supports the `google-generative-ai` `generateContent` shape
+- VoxSense currently supports Gemini-family models exposed through the `google-generative-ai` `generateContent` shape
+- Other multimodal providers are not supported yet
 - If you only want VoxSense, you can disable the built-in STT path with `tools.media.audio.enabled=false`
 - If built-in STT stays enabled, both paths may run and cost more
 
